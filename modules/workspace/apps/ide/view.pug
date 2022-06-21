@@ -328,28 +328,6 @@
                                         label.form-selectgroup-item(ng-repeat="item in viewer.tabs.active_tab.dic.list")
                                             input.form-selectgroup-input(type="radio" name="lang-dic" value="{{item}}" ng-model="viewer.tabs.active_tab.dic_selected")
                                             span.form-selectgroup-label {{ item }}
-                                            
-                            .form-group.d-flex.p-3.pt-1.pb-1.bg-secondary
-                                h4 Compiler
-                            
-                            .form-group.row
-                                .col-3
-                                    label.form-label.col-form-label HTML
-                                .col.col-form-select
-                                    .form-selectgroup
-                                        label.form-selectgroup-item(ng-repeat="item in data.lang.html")
-                                            input.form-selectgroup-input(type="radio" name="compiler_html" value="{{item}}" ng-model="viewer.tabs.active_tab.data.package.properties.html")
-                                            span.form-selectgroup-label {{ item }}
-                            
-                            .form-group.row
-                                .col-3
-                                    label.form-label.col-form-label CSS
-                                .col.col-form-select
-                                    .form-selectgroup
-                                        label.form-selectgroup-item(ng-repeat="item in data.lang.css")
-                                            input.form-selectgroup-input(type="radio" name="compiler_css" value="{{item}}" ng-model="viewer.tabs.active_tab.data.package.properties.css")
-                                            span.form-selectgroup-label {{ item }}
-                            
                             
                             .form-group.d-flex.p-3.pt-1.pb-1.bg-secondary(ng-if="!viewer.tabs.active_tab.new")
                                 h4 Delete
@@ -447,12 +425,11 @@
                                                 i.fa-solid.fa-xmark
 
                                         .code-select.bg-primary.d-flex
-                                            a.btn.btn-square.btn-sm.p-2(ng-click="tab.code.select('controller')" class="{{tab.code.target == 'controller' ? 'text-dark' : 'bg-primary'}}") Controller
                                             a.btn.btn-square.btn-sm.p-2(ng-click="tab.code.select('api')" class="{{tab.code.target == 'api' ? 'text-dark' : 'bg-primary'}}") API
                                             a.btn.btn-square.btn-sm.p-2(ng-click="tab.code.select('socketio')" class="{{tab.code.target == 'socketio' ? 'text-dark' : 'bg-primary'}}") SocketIO
-                                            a.btn.btn-square.btn-sm.p-2(ng-click="tab.code.select('html')" class="{{tab.code.target == 'html' ? 'text-dark' : 'bg-primary'}}") HTML
-                                            a.btn.btn-square.btn-sm.p-2(ng-click="tab.code.select('js')" class="{{tab.code.target == 'js' ? 'text-dark' : 'bg-primary'}}") JS
-                                            a.btn.btn-square.btn-sm.p-2(ng-click="tab.code.select('css')" class="{{tab.code.target == 'css' ? 'text-dark' : 'bg-primary'}}") CSS
+                                            a.btn.btn-square.btn-sm.p-2(ng-click="tab.code.select('vac')" class="{{tab.code.target == 'vac' ? 'text-dark' : 'bg-primary'}}") VAC
+                                            a.btn.btn-square.btn-sm.p-2(ng-click="tab.code.select('jsx')" class="{{tab.code.target == 'jsx' ? 'text-dark' : 'bg-primary'}}") React
+                                            a.btn.btn-square.btn-sm.p-2(ng-click="tab.code.select('scss')" class="{{tab.code.target == 'scss' ? 'text-dark' : 'bg-primary'}}") SCSS
                                             a.btn.btn-square.btn-sm.p-2(ng-click="tab.code.select('dic')" class="{{tab.code.target == 'dic' ? 'text-dark' : 'bg-primary'}}") Dic
                                                 span(ng-if="tab.dic_selected != 'default'") ({{tab.dic_selected}})
                                             a.btn.btn-square.btn-sm.p-2(ng-click="tab.code.select('preview')" class="{{tab.code.target == 'preview' ? 'text-dark' : 'bg-primary'}}") Preview

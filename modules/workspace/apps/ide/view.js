@@ -145,17 +145,13 @@ let wiz_controller = async ($sce, $scope, $timeout) => {
                 script_type: 'text/javascript',
                 theme: '',
                 controller: '',
-                properties: {
-                    html: 'pug', css: 'scss', js: 'javascript'
-                }
             },
             api: '',
-            controller: '',
             socketio: '',
             dic: {},
-            html: '',
-            css: '',
-            js: ''
+            vac: '',
+            scss: '',
+            jsx: ''
         }
         return data;
     }
@@ -586,16 +582,12 @@ let wiz_controller = async ($sce, $scope, $timeout) => {
                 let app_id = item.path.split("/")[0];
                 let code = item.path.split("/")[1];
                 let codemap = {
-                    'controller.py': 'controller',
                     'socketio.py': 'socketio',
                     'api.py': 'api',
                     'dic.json': 'dic',
-                    'view.js': 'js',
-                    'view.css': 'css',
-                    'view.scss': 'css',
-                    'view.less': 'css',
-                    'view.pug': 'html',
-                    'view.html': 'html'
+                    'View.jsx': 'jsx',
+                    'view.scss': 'scss',
+                    'VAC.jsx': 'vac'
                 }
                 if (codemap[code]) {
                     $scope.viewer.tabs.lastcode.app = codemap[code];
@@ -710,7 +702,7 @@ let wiz_controller = async ($sce, $scope, $timeout) => {
 
         // code builder
         obj.code = {};
-        obj.code.list = ['controller', 'api', 'socketio', 'html', 'js', 'css', 'dic', 'preview'];
+        obj.code.list = ['api', 'socketio', 'vac', 'jsx', 'scss', 'dic', 'preview'];
         obj.code.select = async (target) => {
             obj.show = false;
             await $timeout();
@@ -718,7 +710,13 @@ let wiz_controller = async ($sce, $scope, $timeout) => {
             $scope.viewer.tabs.lastcode.app = target;
 
             if (target != 'dic' && target != 'preview') {
-                let map = { controller: 'python', api: 'python', socketio: 'python', css: obj.data.package.properties.css, html: obj.data.package.properties.html, js: 'javascript' };
+                let map = {
+                    api: "python",
+                    socketio: "python",
+                    scss: "css",
+                    vac: "html",
+                    jsx: "javascript",
+                };
                 obj.monaco = monaco_option(map[target], obj);
             }
 
@@ -726,7 +724,7 @@ let wiz_controller = async ($sce, $scope, $timeout) => {
             await $timeout();
         }
 
-        if (!target) target = 'controller';
+        if (!target) target = 'jsx';
         obj.code.select(target);
         return obj;
     }
@@ -881,7 +879,7 @@ let wiz_controller = async ($sce, $scope, $timeout) => {
             if (initialize[1]) app_id = initialize[1];
 
             if (mode == 'app') {
-                let tab = await tab_generator.app(app_id, 'controller');
+                let tab = await tab_generator.app(app_id, 'jsx');
                 if (tab) {
                     obj.data.push(tab);
                     await tab.activate();
@@ -901,7 +899,7 @@ let wiz_controller = async ($sce, $scope, $timeout) => {
         }
 
         obj.lastcode = {};
-        obj.lastcode.app = 'controller';
+        obj.lastcode.app = 'jsx';
         obj.lastcode.route = 'controller';
 
         obj.add = async (mode, target, location) => {
@@ -1218,7 +1216,7 @@ let wiz_controller = async ($sce, $scope, $timeout) => {
                         await $scope.viewer.tabs.data[4].activate();
                     await $timeout();
                 }
-            }
+            },
         }
     };
 

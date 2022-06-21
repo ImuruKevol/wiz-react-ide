@@ -69,7 +69,7 @@ def load():
         mode = wiz.request.query("mode", 'app')
         if mode == 'app':
             app_id = wiz.request.query("id", True)
-            app = wiz.src.app(app_id)
+            app = wiz.server.wiz.model("react/main")("apps").load(app_id)
             res = app.data()
         elif mode == 'route':
             app_id = wiz.request.query("id", True)
@@ -154,8 +154,8 @@ def app_update():
 
     data = wiz.request.query("data", True)
     data = json.loads(data)
-    app = wiz.src.app(app_id)
     try:
+        app = wiz.server.wiz.model("react/main")("apps").load(app_id)
         app.update(data)
         app.manager.clean()
     except Exception as e:
