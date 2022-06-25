@@ -106,7 +106,6 @@ let wiz_controller = async ($sce, $scope, $timeout) => {
     await loader.init();
     $scope.data.lang = {
         html: ['pug', 'html'],
-        css: ['css', 'scss', 'less']
     };
     $scope.data.sortable = { handle: '.draggable' };
     $scope.data.search = {};
@@ -145,6 +144,10 @@ let wiz_controller = async ($sce, $scope, $timeout) => {
                 script_type: 'text/javascript',
                 theme: '',
                 controller: '',
+                properties: {
+                    html: 'pug',
+                    // js: 'javascript',
+                }
             },
             api: '',
             socketio: '',
@@ -513,6 +516,7 @@ let wiz_controller = async ($sce, $scope, $timeout) => {
         obj.change = async () => {
             if (obj.view == 'list') obj.view = 'select';
             else obj.view = 'list';
+            $scope.data.search.text = "";
             await $timeout();
         }
 
@@ -714,7 +718,7 @@ let wiz_controller = async ($sce, $scope, $timeout) => {
                     api: "python",
                     socketio: "python",
                     scss: "css",
-                    vac: "html",
+                    vac: "pug",
                     jsx: "javascript",
                 };
                 obj.monaco = monaco_option(map[target], obj);
@@ -1018,6 +1022,16 @@ let wiz_controller = async ($sce, $scope, $timeout) => {
                 }
             }
 
+            await $timeout();
+        }
+
+        obj.monaco = async (lang) => {
+            if (obj.active_tab.code.target !== "vac") return;
+            obj.active_tab.show = false;
+            await $timeout();
+            obj.active_tab.monaco = monaco_option(lang, obj.active_tab);
+            await $timeout();
+            obj.active_tab.show = true;
             await $timeout();
         }
 

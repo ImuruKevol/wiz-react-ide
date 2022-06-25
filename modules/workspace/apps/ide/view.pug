@@ -312,6 +312,18 @@
                                             span.form-selectgroup-label.d-block {{item ? item : 'Not use'}}
                   
                             .form-group.d-flex.p-3.pt-1.pb-1.bg-secondary
+                                h4 WizView
+                            
+                            .form-group.row
+                                .col-3
+                                    label.form-label.col-form-label HTML
+                                .col.col-form-select
+                                    .form-selectgroup
+                                        label.form-selectgroup-item(ng-repeat="item in data.lang.html" ng-click="viewer.tabs.monaco(item)")
+                                            input.form-selectgroup-input(type="radio" name="compiler_html" value="{{item}}" ng-model="viewer.tabs.active_tab.data.package.properties.html")
+                                            span.form-selectgroup-label {{ item }}
+
+                            .form-group.d-flex.p-3.pt-1.pb-1.bg-secondary
                                 h4 Dictionary
 
                             .form-group.row
