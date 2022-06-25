@@ -81,11 +81,11 @@ let wiz_controller = async ($sce, $scope, $timeout) => {
     if (!$scope.data.hash_id) $scope.data.hash_id = 'app/new';
 
     let loader = {};
-    loader.controller = async () => {
-        let res = await wiz.API.async("controllers");
-        if (res.code == 200) return res.data;
-        return [];
-    };
+    // loader.controller = async () => {
+    //     let res = await wiz.API.async("controllers");
+    //     if (res.code == 200) return res.data;
+    //     return [];
+    // };
     loader.theme = async () => {
         let res = await wiz.API.async("themes");
         if (res.code == 200) return res.data;
@@ -99,7 +99,7 @@ let wiz_controller = async ($sce, $scope, $timeout) => {
 
     loader.init = async () => {
         $scope.data.theme = await loader.theme();
-        $scope.data.controller = await loader.controller();
+        // $scope.data.controller = await loader.controller();
         $scope.data.category = await loader.category();
     }
 
@@ -112,6 +112,7 @@ let wiz_controller = async ($sce, $scope, $timeout) => {
     $scope.data.apps = {};
     $scope.data.files = {};
     $scope.data.files.controller = {};
+    $scope.data.files.modules = {};
     $scope.data.files.model = {};
     $scope.data.files.themes = {};
     $scope.data.files.resources = {};
@@ -820,7 +821,7 @@ let wiz_controller = async ($sce, $scope, $timeout) => {
             alert("Not supported file");
             return null;
         }
-
+        console.log(mode, item);
         item.data = data;
 
         let obj = {};

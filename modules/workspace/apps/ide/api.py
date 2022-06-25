@@ -16,16 +16,16 @@ def themes():
     res = [""] + wiz.src.theme.list()
     wiz.response.status(200, res)
 
-def controllers():
-    branchfs = wiz.branchfs()
-    ctrls = [""]
-    controllers = branchfs.files(os.path.join("interfaces", "controller"), recursive=True)
-    for ctrl in controllers:
-        ctrl = ctrl.replace(os.path.join("interfaces", "controller") + "/", "")
-        if branchfs.isfile(os.path.join("interfaces", "controller", ctrl)):
-            ctrl = os.path.splitext(ctrl)[0]
-            ctrls.append(ctrl)
-    wiz.response.status(200, ctrls)
+# def controllers():
+#     branchfs = wiz.branchfs()
+#     ctrls = [""]
+#     controllers = branchfs.files(os.path.join("interfaces", "controller"), recursive=True)
+#     for ctrl in controllers:
+#         ctrl = ctrl.replace(os.path.join("interfaces", "controller") + "/", "")
+#         if branchfs.isfile(os.path.join("interfaces", "controller", ctrl)):
+#             ctrl = os.path.splitext(ctrl)[0]
+#             ctrls.append(ctrl)
+#     wiz.response.status(200, ctrls)
 
 def clean():
     wiz.server.config.reload()
@@ -86,6 +86,8 @@ def load():
 
             res = None
             extmap = wiz.server.config.wiz.file_support
+            extmap['.jsx'] = "code/javascript"
+            extmap['.tsx'] = "code/typescript"
             ext =  os.path.splitext(path)[1].lower()
             if ext in extmap:
                 exttype = extmap[ext]
