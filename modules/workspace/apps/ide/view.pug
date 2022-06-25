@@ -274,9 +274,9 @@
 
                             .form-group.row
                                 .col-3
-                                    label.form-label.col-form-label Title
+                                    label.form-label.col-form-label Component
                                 .col
-                                    input.form-control.form-control-sm.form-control-round(type="text" ng-model="viewer.tabs.active_tab.data.package.title" placeholder="App Title")
+                                    input.form-control.form-control-sm.form-control-round(type="text" ng-model="viewer.tabs.active_tab.data.package.title" placeholder="WizComponent")
 
                             .form-group.row
                                 .col-3
@@ -439,8 +439,8 @@
                                         .code-select.bg-primary.d-flex
                                             a.btn.btn-square.btn-sm.p-2(ng-click="tab.code.select('api')" class="{{tab.code.target == 'api' ? 'text-dark' : 'bg-primary'}}") API
                                             a.btn.btn-square.btn-sm.p-2(ng-click="tab.code.select('socketio')" class="{{tab.code.target == 'socketio' ? 'text-dark' : 'bg-primary'}}") SocketIO
-                                            a.btn.btn-square.btn-sm.p-2(ng-click="tab.code.select('vac')" class="{{tab.code.target == 'vac' ? 'text-dark' : 'bg-primary'}}") VAC
                                             a.btn.btn-square.btn-sm.p-2(ng-click="tab.code.select('jsx')" class="{{tab.code.target == 'jsx' ? 'text-dark' : 'bg-primary'}}") React
+                                            a.btn.btn-square.btn-sm.p-2(ng-click="tab.code.select('view')" class="{{tab.code.target == 'view' ? 'text-dark' : 'bg-primary'}}") View
                                             a.btn.btn-square.btn-sm.p-2(ng-click="tab.code.select('scss')" class="{{tab.code.target == 'scss' ? 'text-dark' : 'bg-primary'}}") SCSS
                                             a.btn.btn-square.btn-sm.p-2(ng-click="tab.code.select('dic')" class="{{tab.code.target == 'dic' ? 'text-dark' : 'bg-primary'}}") Dic
                                                 span(ng-if="tab.dic_selected != 'default'") ({{tab.dic_selected}})

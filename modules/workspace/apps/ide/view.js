@@ -152,7 +152,7 @@ let wiz_controller = async ($sce, $scope, $timeout) => {
             api: '',
             socketio: '',
             dic: {},
-            vac: '',
+            view: '',
             scss: '',
             jsx: ''
         }
@@ -306,6 +306,10 @@ let wiz_controller = async ($sce, $scope, $timeout) => {
     $scope.event.save = async () => {
         let mode = $scope.viewer.tabs.active_tab.mode;
         let data = angular.copy($scope.viewer.tabs.active_tab.data);
+        const { title } = data.package;
+        if (!/^[A-Z]{1}[A-Za-z]+$/.test(title)) {
+            return alert("Component Name is start with Large Alphabet and only alphabet");
+        }
 
         if (mode == 'app') {
             let is_new = $scope.viewer.tabs.active_tab.new;
@@ -589,9 +593,9 @@ let wiz_controller = async ($sce, $scope, $timeout) => {
                     'socketio.py': 'socketio',
                     'api.py': 'api',
                     'dic.json': 'dic',
-                    'View.jsx': 'jsx',
+                    'component.jsx': 'jsx',
                     'view.scss': 'scss',
-                    'VAC.jsx': 'vac'
+                    'view.jsx': 'view'
                 }
                 if (codemap[code]) {
                     $scope.viewer.tabs.lastcode.app = codemap[code];
@@ -706,7 +710,7 @@ let wiz_controller = async ($sce, $scope, $timeout) => {
 
         // code builder
         obj.code = {};
-        obj.code.list = ['api', 'socketio', 'vac', 'jsx', 'scss', 'dic', 'preview'];
+        obj.code.list = ['api', 'socketio', 'view', 'jsx', 'scss', 'dic', 'preview'];
         obj.code.select = async (target) => {
             obj.show = false;
             await $timeout();
@@ -718,7 +722,7 @@ let wiz_controller = async ($sce, $scope, $timeout) => {
                     api: "python",
                     socketio: "python",
                     scss: "css",
-                    vac: "pug",
+                    view: "pug",
                     jsx: "javascript",
                 };
                 obj.monaco = monaco_option(map[target], obj);
@@ -1026,7 +1030,7 @@ let wiz_controller = async ($sce, $scope, $timeout) => {
         }
 
         obj.monaco = async (lang) => {
-            if (obj.active_tab.code.target !== "vac") return;
+            if (obj.active_tab.code.target !== "view") return;
             obj.active_tab.show = false;
             await $timeout();
             obj.active_tab.monaco = monaco_option(lang, obj.active_tab);
