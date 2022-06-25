@@ -48,6 +48,8 @@ def list():
             mode = os.path.join('interfaces', mode)
         elif mode == 'store':
             mode = os.path.join('builtin_modules', 'WizStore')
+        elif mode == 'router':
+            mode = os.path.join('builtin_modules', 'WizRouter')
 
         basepath = os.path.join(season.path.project, "branch", wiz.branch(), mode)
         fs = season.util.os.FileSystem(basepath)
@@ -85,6 +87,9 @@ def load():
                 mode = os.path.join('interfaces', mode)
             elif mode == 'store':
                 mode = os.path.join('builtin_modules', 'WizStore')
+            elif mode == 'router':
+                mode = os.path.join('builtin_modules', 'WizRouter')
+
             basepath = os.path.join(season.path.project, "branch", wiz.branch(), mode)
             fs = season.util.os.FileSystem(basepath)
 
@@ -124,8 +129,8 @@ def app_create():
     for c in app_id:
         if c not in allowed:
             wiz.response.status(500, "only alphabet and number and . in package id")
-    app = wiz.src.app(app_id)
     try:
+        app = wiz.server.wiz.model("react/main")("apps").load(app_id)
         app.update(data)
         app.manager.clean()
     except Exception as e:
@@ -261,6 +266,8 @@ def file_create():
         mode = os.path.join('interfaces', mode)
     elif mode == 'store':
         mode = os.path.join('builtin_modules', 'WizStore')
+    elif mode == 'router':
+        mode = os.path.join('builtin_modules', 'WizRouter')
 
     basepath = os.path.join(wiz.branchpath(), mode, path)
     fs = season.util.os.FileSystem(basepath)
@@ -288,6 +295,8 @@ def file_update():
         mode = os.path.join('interfaces', mode)
     elif mode == 'store':
         mode = os.path.join('builtin_modules', 'WizStore')
+    elif mode == 'router':
+        mode = os.path.join('builtin_modules', 'WizRouter')
 
     basepath = os.path.join(season.path.project, "branch", wiz.branch(), mode)
 
@@ -316,6 +325,9 @@ def file_delete():
         mode = os.path.join('interfaces', mode)
     elif mode == 'store':
         mode = os.path.join('builtin_modules', 'WizStore')
+    elif mode == 'router':
+        mode = os.path.join('builtin_modules', 'WizRouter')
+
     basepath = os.path.join(season.path.project, "branch", wiz.branch(), mode)
     fs = season.util.os.FileSystem(basepath)
     path = wiz.request.query("path", True)
@@ -332,6 +344,9 @@ def download():
         mode = os.path.join('interfaces', mode)
     elif mode == 'store':
         mode = os.path.join('builtin_modules', 'WizStore')
+    elif mode == 'router':
+        mode = os.path.join('builtin_modules', 'WizRouter')
+
     basepath = os.path.join(season.path.project, "branch", wiz.branch(), mode)
     fs = season.util.os.FileSystem(basepath)
 

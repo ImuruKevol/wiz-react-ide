@@ -111,6 +111,7 @@ let wiz_controller = async ($sce, $scope, $timeout) => {
     $scope.data.search = {};
     $scope.data.apps = {};
     $scope.data.files = {};
+    $scope.data.files.router = {};
     $scope.data.files.controller = {};
     $scope.data.files.store = {};
     $scope.data.files.modules = {};

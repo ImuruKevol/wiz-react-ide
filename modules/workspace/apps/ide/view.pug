@@ -33,7 +33,17 @@
                                         span.mr-2(style="width: 20px; text-align: center;")
                                             i.fa-solid.fa-link
                                         .d-block
-                                            .nav-link-title Routes
+                                            .nav-link-title API
+
+                        li.nav-item
+                            .row.m-0.p-0
+                                .col.m-0.p-0
+                                    a.nav-link(ng-click="event.load('router')")
+                                        span.mr-2(style="width: 20px; text-align: center;")
+                                            i.fa-solid.fa-link
+                                        .d-block
+                                            .nav-link-title Router
+
                         li.nav-item
                             .row.m-0.p-0
                                 .col.m-0.p-0
@@ -59,7 +69,7 @@
                                         span.mr-2(style="width: 20px; text-align: center;")
                                             i.fa-solid.fa-filter
                                         .d-block
-                                            .nav-link-title Recoil Store
+                                            .nav-link-title WizStore(Recoil)
                         
                         li.nav-item
                             .row.m-0.p-0
@@ -145,7 +155,7 @@
                                 .nav-item-status.col-auto.align-self-center.m-0.p-0.mr-2
                                     i.fa-solid.fa-circle
 
-                    ul.navbar-nav(ng-if="['controller', 'store', 'modules', 'model', 'themes', 'resources', 'config'].includes(viewer.list.mode)")
+                    ul.navbar-nav(ng-if="['router', 'controller', 'store', 'modules', 'model', 'themes', 'resources', 'config'].includes(viewer.list.mode)")
                         li.nav-item.nav-item-header
                             .text-left
                                 span {{viewer.list.mode}}/{{data.files[viewer.list.mode].path}}
@@ -311,14 +321,14 @@
                                             input.form-selectgroup-input(type="radio" name="category" value="{{item.id}}" ng-model="viewer.tabs.active_tab.data.package.category")
                                             span.form-selectgroup-label {{item.title}}
                             
-                            .form-group.row
-                                .col-3
-                                    label.form-label.col-form-label Controller
-                                .col.col-form-select
-                                    .form-selectgroup
-                                        label.form-selectgroup-item(ng-repeat="item in data.controller")
-                                            input.form-selectgroup-input(type="radio" name="controller" value="{{item}}" ng-model="viewer.tabs.active_tab.data.package.controller")
-                                            span.form-selectgroup-label {{item ? item : 'Not use'}}
+                            //- .form-group.row
+                            //-     .col-3
+                            //-         label.form-label.col-form-label Controller
+                            //-     .col.col-form-select
+                            //-         .form-selectgroup
+                            //-             label.form-selectgroup-item(ng-repeat="item in data.controller")
+                            //-                 input.form-selectgroup-input(type="radio" name="controller" value="{{item}}" ng-model="viewer.tabs.active_tab.data.package.controller")
+                            //-                 span.form-selectgroup-label {{item ? item : 'Not use'}}
 
                             .form-group.row
                                 .col-3
@@ -499,12 +509,12 @@
                                             div(ng-if="tab.code.target == 'dic'" ng-model="tab.dic.data[tab.dic_selected]" ui-monaco-opts="tab.dic.monaco" ui-monaco)
 
                                     //- file editor
-                                    .monaco-area(ng-if="['model', 'controller', 'resources', 'store', 'modules', 'themes', 'config'].includes(tab.mode)" style="height: {{ viewer.debug.show ? 'calc(60vh - 62px)' : '100%' }} !important;")
+                                    .monaco-area(ng-if="['model', 'controller', 'resources', 'router', 'store', 'modules', 'themes', 'config'].includes(tab.mode)" style="height: {{ viewer.debug.show ? 'calc(60vh - 62px)' : '100%' }} !important;")
                                         .draggable.code-title.bg-primary.d-flex
                                             .pl-2(style="max-width: 80%;")
                                                 .nowrap(ng-if="!tab.new")
-                                                    span(ng-if="!['modules', 'store'].includes(tab.mode)") [{{tab.mode}}] {{tab.data.name}}
-                                                    span(ng-if="['modules', 'store'].includes(tab.mode)") [{{tab.mode}}] {{tab.data.path}}
+                                                    span(ng-if="!['router', 'modules', 'store'].includes(tab.mode)") [{{tab.mode}}] {{tab.data.name}}
+                                                    span(ng-if="['router', 'modules', 'store'].includes(tab.mode)") [{{tab.mode}}] {{tab.data.path}}
                                             .ml-auto
                                             a.btn.btn-square.btn-sm.btn-primary.p-2(ng-click="viewer.tabs.hide(tab)")
                                                 i.fa-solid.fa-minus
@@ -542,7 +552,7 @@
                                                     tr
                                                         td.text-center.p-4 No Changes
                                             table.table.table-sm.table-hover.mb-0(ng-if="viewer.branch.count > 0")
-                                                tbody(ng-repeat="mode in ['routes', 'apps', 'controller', 'store', 'modules', 'model', 'themes', 'resources', 'config']" ng-if="viewer.branch.data[mode].length > 0")
+                                                tbody(ng-repeat="mode in ['routes', 'apps', 'controller', 'router', 'store', 'modules', 'model', 'themes', 'resources', 'config']" ng-if="viewer.branch.data[mode].length > 0")
                                                     tr.bg-secondary
                                                         th {{mode}}
                                                             small.text-muted.ml-1 ({{viewer.branch.data[mode].length}})
@@ -601,7 +611,7 @@
                                         span route/new
                                     .nowrap(ng-if="!tab.new")
                                         span route/{{tab.data.package.title}} 
-                                .title(ng-if="['model', 'controller', 'store', 'modules', 'resources', 'themes', 'config'].includes(tab.mode)")
+                                .title(ng-if="['model', 'controller', 'router', 'store', 'modules', 'resources', 'themes', 'config'].includes(tab.mode)")
                                     .nowrap(ng-if="tab.new")
                                         span route/new
                                     .nowrap(ng-if="!tab.new")
