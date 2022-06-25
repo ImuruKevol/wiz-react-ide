@@ -112,6 +112,7 @@ let wiz_controller = async ($sce, $scope, $timeout) => {
     $scope.data.apps = {};
     $scope.data.files = {};
     $scope.data.files.controller = {};
+    $scope.data.files.store = {};
     $scope.data.files.modules = {};
     $scope.data.files.model = {};
     $scope.data.files.themes = {};
@@ -307,12 +308,12 @@ let wiz_controller = async ($sce, $scope, $timeout) => {
     $scope.event.save = async () => {
         let mode = $scope.viewer.tabs.active_tab.mode;
         let data = angular.copy($scope.viewer.tabs.active_tab.data);
-        const { title } = data.package;
-        if (!/^[A-Z]{1}[A-Za-z]+$/.test(title)) {
-            return alert("Component Name is start with Large Alphabet and only alphabet");
-        }
 
         if (mode == 'app') {
+            const { title } = data.package;
+            if (!/^[A-Z]{1}[A-Za-z]+$/.test(title)) {
+                return alert("Component Name is start with Large Alphabet and only alphabet");
+            }
             let is_new = $scope.viewer.tabs.active_tab.new;
             let org_app_id = $scope.viewer.tabs.active_tab.org_app_id;
 
@@ -711,7 +712,7 @@ let wiz_controller = async ($sce, $scope, $timeout) => {
 
         // code builder
         obj.code = {};
-        obj.code.list = ['api', 'socketio', 'view', 'jsx', 'scss', 'dic', 'preview'];
+        obj.code.list = ['api', 'socketio', 'jsx', 'view', 'scss', 'dic', 'preview'];
         obj.code.select = async (target) => {
             obj.show = false;
             await $timeout();
@@ -821,7 +822,6 @@ let wiz_controller = async ($sce, $scope, $timeout) => {
             alert("Not supported file");
             return null;
         }
-        console.log(mode, item);
         item.data = data;
 
         let obj = {};

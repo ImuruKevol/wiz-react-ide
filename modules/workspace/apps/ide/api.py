@@ -46,6 +46,8 @@ def list():
             path = path[1:]
         if mode in ['controller', 'model']:
             mode = os.path.join('interfaces', mode)
+        elif mode == 'store':
+            mode = os.path.join('builtin_modules', 'WizStore')
 
         basepath = os.path.join(season.path.project, "branch", wiz.branch(), mode)
         fs = season.util.os.FileSystem(basepath)
@@ -81,6 +83,8 @@ def load():
                 path = path[1:]
             if mode in ['controller', 'model']:
                 mode = os.path.join('interfaces', mode)
+            elif mode == 'store':
+                mode = os.path.join('builtin_modules', 'WizStore')
             basepath = os.path.join(season.path.project, "branch", wiz.branch(), mode)
             fs = season.util.os.FileSystem(basepath)
 
@@ -255,6 +259,8 @@ def file_create():
         path = path[1:]
     if mode in ['controller', 'model']:
         mode = os.path.join('interfaces', mode)
+    elif mode == 'store':
+        mode = os.path.join('builtin_modules', 'WizStore')
 
     basepath = os.path.join(wiz.branchpath(), mode, path)
     fs = season.util.os.FileSystem(basepath)
@@ -280,6 +286,8 @@ def file_update():
         path = path[1:]
     if mode in ['controller', 'model']:
         mode = os.path.join('interfaces', mode)
+    elif mode == 'store':
+        mode = os.path.join('builtin_modules', 'WizStore')
 
     basepath = os.path.join(season.path.project, "branch", wiz.branch(), mode)
 
@@ -304,7 +312,10 @@ def file_update():
 
 def file_delete():
     mode = wiz.request.query("mode", True)
-    if mode in ['controller', 'model']: mode = os.path.join('interfaces', mode)
+    if mode in ['controller', 'model']:
+        mode = os.path.join('interfaces', mode)
+    elif mode == 'store':
+        mode = os.path.join('builtin_modules', 'WizStore')
     basepath = os.path.join(season.path.project, "branch", wiz.branch(), mode)
     fs = season.util.os.FileSystem(basepath)
     path = wiz.request.query("path", True)
@@ -317,7 +328,10 @@ def file_delete():
 
 def download():
     mode = wiz.request.query("mode", True)
-    if mode in ['controller', 'model']: mode = os.path.join('interfaces', mode)
+    if mode in ['controller', 'model']:
+        mode = os.path.join('interfaces', mode)
+    elif mode == 'store':
+        mode = os.path.join('builtin_modules', 'WizStore')
     basepath = os.path.join(season.path.project, "branch", wiz.branch(), mode)
     fs = season.util.os.FileSystem(basepath)
 
