@@ -612,6 +612,22 @@ let wiz_controller = async ($sce, $scope, $timeout) => {
         return obj;
     })();
 
+    $scope.viewer.yarn = (function () {
+        let obj = {};
+        obj.show = false;
+
+        obj.toggle = async () => {
+            if (obj.show) {
+                obj.show = false;
+            } else {
+                obj.show = true;
+            }
+            await $timeout();
+        }
+
+        return obj;
+    })();
+
     $scope.viewer.info = (function () {
         let obj = {};
         obj.show = true;
@@ -1240,9 +1256,73 @@ let wiz_controller = async ($sce, $scope, $timeout) => {
         }
     };
 
+    // yarn
+    $scope.yarn_init = async () => {
+        $scope.yarn = {
+            package: {
+                dependencies: [],
+                devDependencies: [],
+            },
+            name: "",
+            isdev: false,
+        };
+        const load = async () => {
+            const { code, data } = await wiz.API.async("package", {});
+            if (code !== 200) {
+                toastr.error("package.json load FAILED");
+                return;
+            }
+            const { dependencies, devDependencies } = data;
+            $scope.yarn.package = {
+                dependencies: Object.entries(dependencies),
+                devDependencies: Object.entries(devDependencies),
+            };
+            $scope.yarn.name = "";
+            $scope.yarn.isdev = false;
+        }
+
+        await load();
+
+        $scope.yarn.add = async () => {
+            const { name, isdev } = $scope.yarn;
+            const { code } = await wiz.API.async("package_add", { name, isdev });
+            if (code !== 200) {
+                toastr.error(`yarn add ${isdev ? "-D " : ""}${name} FAILED`);
+                return;
+            }
+            await load();
+            await $timeout();
+        }
+
+        $scope.yarn.upgrade = async (name, parent) => {
+            const isdev = parent === "devDependencies";
+            const { code } = await wiz.API.async("package_add", { name, isdev });
+            if (code !== 200) {
+                toastr.error(`yarn add ${isdev ? "-D " : ""}${name} FAILED`);
+                return;
+            }
+            await load();
+            await $timeout();
+        }
+
+        $scope.yarn.remove = async (name, parent) => {
+            const isdev = parent === "devDependencies";
+            const { code, data } = await wiz.API.async("package_remove", { name, isdev });
+            if (code !== 200) {
+                toastr.error(`yarn remove ${isdev ? "-D " : ""}${name} FAILED`);
+                return;
+            }
+            await load();
+            await $timeout();
+        }
+
+        await $timeout();
+    }
+
     // load app
     await $scope.event.load();
     await $scope.viewer.tabs.init();
+    await $scope.yarn_init();
     await $timeout();
 
     // bind shortcut

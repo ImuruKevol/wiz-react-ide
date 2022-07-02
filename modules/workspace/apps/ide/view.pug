@@ -562,6 +562,49 @@
                                                                 span.badge.badge-sm.mr-1(class="{{item.color}}") {{item.change_type}}
                                                                 span {{item.path}}
 
+                                .editor-tab-editor-container(ng-if="viewer.yarn.show" style="width: 400px; height: 100%;")
+                                    .d-block(style="height: {{ viewer.yarn.show ? 'calc(60vh - 60px)' : '100%' }};")
+                                        .d-block
+                                            .d-flex.p-3.pt-2.pb-2.bg-primary-lt
+                                                h3.nowrap.m-0(style="max-width: 220px; overflow: hidden; text-overflow: ellipsis;")
+                                                    span Yarn Package
+                                                .ml-auto
+                                                    button.btn.btn-primary.btn-circle.btn-sm(style="height: 24px; width: 24px;" ng-click="viewer.yarn.toggle()")
+                                                        i.fa-solid.fa-xmark
+                                        .d-flex.p-3.pt-2.pb-2
+                                            a(href="https://www.npmjs.com/search?q=react" target="_blank") 패키지 검색
+                                        .d-flex.p-3.pt-2.pb-2
+                                            .mr-auto
+                                                label yarn add
+                                                label
+                                                    input(type="checkbox" ng-model="yarn.isdev")
+                                                    | -D
+                                                input(type="text" placeholder="react" ng-model="yarn.name")
+                                                button.btn.btn-secondary(ng-click="yarn.add()") execute
+                                        .scroll(style="height: calc(100% - 40px); overflow: auto;")
+                                            .p-1(ng-repeat="(key, dep) in yarn.package")
+                                                h3
+                                                    span {{key}}
+                                                table.table.table-bordered.table-hover
+                                                    colgroup
+                                                        col
+                                                        col(style="width: 110px;")
+                                                        col(style="width: 100px;")
+                                                    thead
+                                                        th.text-center Package
+                                                        th.text-center Version
+                                                        th.text-center Action
+                                                    tbody
+                                                        tr(ng-repeat="pkg in dep")
+                                                            th {{pkg[0]}}
+                                                            td {{pkg[1]}}
+                                                            td.yarn-action
+                                                                span(ng-click="yarn.upgrade(pkg[0], key)")
+                                                                    i.fa-solid.fa-circle-up
+                                                                span(ng-click="yarn.remove(pkg[0], key)")
+                                                                    i.fa-solid.fa-xmark
+
+
                                 .editor-tab-editor-container(ng-if="viewer.shortcut.show" style="width: 320px; height: 100%;")
                                     .d-block(style="height: {{ viewer.debug.show ? 'calc(60vh - 60px)' : '100%' }};")
                                         .d-flex.p-3.pt-2.pb-2.bg-primary-lt
@@ -633,6 +676,10 @@
                     .d-block
                         .btn(ng-click="viewer.branch.toggle()" class="{{viewer.branch.show ? 'btn-primary' : 'btn-white'}}")
                             i.fa-solid.fa-code-branch
+                    
+                    .d-block
+                        .btn(ng-click="viewer.yarn.toggle()" class="{{viewer.yarn.show ? 'btn-primary' : 'btn-white'}}")
+                            i.fa-solid.fa-cubes
                     
                     .mt-auto
 

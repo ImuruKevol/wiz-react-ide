@@ -420,3 +420,42 @@ def git_commit():
     except Exception as e:
         wiz.response.status(500, str(e))
     wiz.response.status(200)
+
+def package():
+    yarn = wiz.server.wiz.model("react/yarn")()
+
+    _info = yarn.info()
+    except_target = yarn.default_dep + yarn.default_devdep
+    dependencies = {}
+    for pkg in _info["dependencies"]:
+        if pkg not in except_target:
+            dependencies[pkg] = _info["dependencies"][pkg]
+    devDependencies = {}
+    for pkg in _info["devDependencies"]:
+        if pkg not in except_target:
+            devDependencies[pkg] = _info["devDependencies"][pkg]
+    wiz.response.status(200, {
+        "dependencies": dependencies,
+        "devDependencies": devDependencies,
+    })
+
+def package_add():
+    package_name = wiz.request.query("name", True)
+    isdev = wiz.request.query("isdev", True)
+    yarn = wiz.server.wiz.model("react/yarn")()
+    targets = [package_name]
+    mode = "dev" if isdev == 'true' else "normal"
+    yarn.add(*targets, mode=mode)
+    wiz.response.status(200)
+
+def package_remove():
+    package_name = wiz.request.query("name", True)
+    isdev = wiz.request.query("isdev", True)
+    yarn = wiz.server.wiz.model("react/yarn")()
+    except_target = yarn.default_dep + yarn.default_devdep
+    if package_name in except_target:
+        wiz.response.status(500)
+
+    mode = "dev" if isdev == 'true' else "normal"
+    yarn.remove(package_name, mode=mode)
+    wiz.response.status(200)
