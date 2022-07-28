@@ -18,9 +18,9 @@
                 .ml-auto
                 .btn.btn-sm.btn-primary.btn-circle.ml-1(ng-if="!['app', 'route'].includes(viewer.list.mode)" style="width: 36px;" ng-click="viewer.tabs.add(viewer.list.mode, 'newfolder')")
                     i.fa-solid.fa-folder-plus
-                .btn.btn-sm.btn-primary.btn-circle.ml-1(style="width: 36px;" ng-if="viewer.tabs.active_tab.mode != 'app'" ng-click="viewer.tabs.add(viewer.list.mode, 'new')")
+                .btn.btn-sm.btn-primary.btn-circle.ml-1(style="width: 36px;" ng-if="viewer.list.mode != 'app'" ng-click="viewer.tabs.add(viewer.list.mode, 'new')")
                     i.fa-solid.fa-plus
-                label.component-add.btn.btn-sm.btn-primary.btn-circle.ml-1(style="width: 36px;" ng-if="viewer.tabs.active_tab.mode == 'app'")
+                label.component-add.btn.btn-sm.btn-primary.btn-circle.ml-1(style="width: 36px;" ng-if="viewer.list.mode == 'app'")
                     i.fa-solid.fa-plus
                     input.blind(type="checkbox")
                     .category-list
@@ -316,7 +316,7 @@
                                     .form-selectgroup
                                         label.form-selectgroup-item.d-block(ng-repeat="item in data.theme")
                                             input.form-selectgroup-input(type="radio" name="theme" value="{{item}}" ng-model="viewer.tabs.active_tab.data.package.theme")
-                                            span.form-selectgroup-label.d-block {{item ? item : 'Not use'}}
+                                            span.form-selectgroup-label.d-block {{item}}
                   
                             .form-group.d-flex.p-3.pt-1.pb-1.bg-secondary
                                 h4 WizView

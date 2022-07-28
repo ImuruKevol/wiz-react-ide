@@ -144,7 +144,7 @@ let wiz_controller = async ($sce, $scope, $timeout) => {
             package: {
                 id: '',
                 category,
-                theme: '',
+                theme: 'react/base',
                 controller: '',
                 properties: {
                     html: 'html',

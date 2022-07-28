@@ -13,19 +13,8 @@ def categories():
     wiz.response.status(200, category)
 
 def themes():
-    res = [""] + wiz.src.theme.list()
+    res = wiz.src.theme.list()
     wiz.response.status(200, res)
-
-# def controllers():
-#     branchfs = wiz.branchfs()
-#     ctrls = [""]
-#     controllers = branchfs.files(os.path.join("interfaces", "controller"), recursive=True)
-#     for ctrl in controllers:
-#         ctrl = ctrl.replace(os.path.join("interfaces", "controller") + "/", "")
-#         if branchfs.isfile(os.path.join("interfaces", "controller", ctrl)):
-#             ctrl = os.path.splitext(ctrl)[0]
-#             ctrls.append(ctrl)
-#     wiz.response.status(200, ctrls)
 
 def clean():
     wiz.server.config.reload()
