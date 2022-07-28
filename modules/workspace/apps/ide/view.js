@@ -737,11 +737,16 @@ let wiz_controller = async ($sce, $scope, $timeout) => {
             $scope.viewer.tabs.lastcode.app = target;
 
             if (target != 'dic' && target != 'preview') {
+                let _view = 'html';
+                try {
+                    _view = $scope.cache.apps[app_id].package.properties.html;
+                }
+                catch { }
                 let map = {
                     api: "python",
                     socketio: "python",
                     scss: "scss",
-                    view: $scope.cache.apps[app_id].package.properties.html || 'html',
+                    view: _view,
                     jsx: "javascript",
                 };
                 obj.monaco = monaco_option(map[target], obj);
@@ -1370,7 +1375,7 @@ let wiz_controller = async ($sce, $scope, $timeout) => {
                             kind: window.monaco.languages.CompletionItemKind.EnumMember,
                             insertText: `$1</${tag}>`,
                             insertTextRules: window.monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
-                            range:  {
+                            range: {
                                 startLineNumber: position.lineNumber,
                                 endLineNumber: position.lineNumber,
                                 startColumn: word.startColumn,
