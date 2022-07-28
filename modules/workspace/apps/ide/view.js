@@ -740,8 +740,8 @@ let wiz_controller = async ($sce, $scope, $timeout) => {
                 let map = {
                     api: "python",
                     socketio: "python",
-                    scss: "css",
-                    view: "pug",
+                    scss: "scss",
+                    view: $scope.cache.apps[app_id].package.properties.html || 'html',
                     jsx: "javascript",
                 };
                 obj.monaco = monaco_option(map[target], obj);
@@ -1349,6 +1349,76 @@ let wiz_controller = async ($sce, $scope, $timeout) => {
         }
 
         season.shortcut(window, shortcut_opts);
+        const autoClosing = {
+            triggerCharacters: ['>'],
+            provideCompletionItems: (model, position) => {
+                const codePre = model.getValueInRange({
+                    startLineNumber: position.lineNumber,
+                    startColumn: 1,
+                    endLineNumber: position.lineNumber,
+                    endColumn: position.column,
+                });
+                const tag = codePre.match(/.*<(\w+)>$/)?.[1];
+                if (!tag) {
+                    return;
+                }
+                const word = model.getWordUntilPosition(position);
+                return {
+                    suggestions: [
+                        {
+                            label: `</${tag}>`,
+                            kind: window.monaco.languages.CompletionItemKind.EnumMember,
+                            insertText: `$1</${tag}>`,
+                            insertTextRules: window.monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                            range:  {
+                                startLineNumber: position.lineNumber,
+                                endLineNumber: position.lineNumber,
+                                startColumn: word.startColumn,
+                                endColumn: word.endColumn,
+                            },
+                        },
+                    ],
+                };
+            },
+        }
+        // const wizCapture = {
+        //     provideCompletionItems: (model, position) => {
+        //         const codePre = model.getValueInRange({
+        //             startLineNumber: position.lineNumber,
+        //             startColumn: 1,
+        //             endLineNumber: position.lineNumber,
+        //             endColumn: position.column,
+        //         });
+        //         const wizStr = codePre.match(/.*(wiz)$/)?.[1];
+        //         if (!wizStr) {
+        //             return;
+        //         }
+        //         const word = model.getWordUntilPosition(position);
+        //         const opt = {
+        //             kind: window.monaco.languages.CompletionItemKind.EnumMember,
+        //             insertTextRules: window.monaco.languages.CompletionItemInsertTextRule.KeepWhitespace,
+        //             range:  {
+        //                 startLineNumber: position.lineNumber,
+        //                 endLineNumber: position.lineNumber,
+        //                 startColumn: word.startColumn,
+        //                 endColumn: word.endColumn,
+        //             },
+        //         };
+        //         const suggestions = ["State", "Value"].map(label => {
+        //             return {
+        //                 label: `wiz${label}`,
+        //                 insertText: `wiz${label}\nconst controller = () => {}`,
+        //                 ...opt,
+        //             }
+        //         });
+        //         return {
+        //             suggestions,
+        //         };
+        //     },
+        // }
+        window.monaco.languages.registerCompletionItemProvider('html', autoClosing);
+        window.monaco.languages.registerCompletionItemProvider('javascript', autoClosing);
+        // window.monaco.languages.registerCompletionItemProvider('javascript', wizCapture);
     }
 
     await $scope.shortcut.bind();
