@@ -18,8 +18,14 @@
                 .ml-auto
                 .btn.btn-sm.btn-primary.btn-circle.ml-1(ng-if="!['app', 'route'].includes(viewer.list.mode)" style="width: 36px;" ng-click="viewer.tabs.add(viewer.list.mode, 'newfolder')")
                     i.fa-solid.fa-folder-plus
-                .btn.btn-sm.btn-primary.btn-circle.ml-1(style="width: 36px;" ng-click="viewer.tabs.add(viewer.list.mode, 'new')")
+                .btn.btn-sm.btn-primary.btn-circle.ml-1(style="width: 36px;" ng-if="viewer.tabs.active_tab.mode != 'app'" ng-click="viewer.tabs.add(viewer.list.mode, 'new')")
                     i.fa-solid.fa-plus
+                label.component-add.btn.btn-sm.btn-primary.btn-circle.ml-1(style="width: 36px;" ng-if="viewer.tabs.active_tab.mode == 'app'")
+                    i.fa-solid.fa-plus
+                    input.blind(type="checkbox")
+                    .category-list
+                        .category-list-item(ng-click="viewer.tabs.add(viewer.list.mode, 'new', null, 'page')") Page
+                        .category-list-item(ng-click="viewer.tabs.add(viewer.list.mode, 'new', null, 'component')") Component
                 .btn.btn-sm.btn-primary.btn-circle.ml-1(ng-if="viewer.list.view == 'list'" style="width: 36px;" ng-click="viewer.list.change()")
                     i.fa-solid.fa-xmark
 
@@ -52,16 +58,7 @@
                                             i.fa-solid.fa-cubes
                                         .d-block
                                             .nav-link-title Apps
-                        
-                        //- li.nav-item
-                        //-     .row.m-0.p-0
-                        //-         .col.m-0.p-0
-                        //-             a.nav-link(ng-click="event.load('controller')")
-                        //-                 span.mr-2(style="width: 20px; text-align: center;")
-                        //-                     i.fa-solid.fa-filter
-                        //-                 .d-block
-                        //-                     .nav-link-title Controller
-                        
+
                         li.nav-item
                             .row.m-0.p-0
                                 .col.m-0.p-0
@@ -311,24 +308,6 @@
                                     label.form-label.col-form-label View URI
                                 .col
                                     input.form-control.form-control-sm.form-control-round(type="text" ng-model="viewer.tabs.active_tab.data.package.viewuri" placeholder="/routename/path")
-                            
-                            .form-group.row
-                                .col-3
-                                    label.form-label.col-form-label Category
-                                .col.col-form-select
-                                    .form-selectgroup
-                                        label.form-selectgroup-item(ng-repeat="item in data.category")
-                                            input.form-selectgroup-input(type="radio" name="category" value="{{item.id}}" ng-model="viewer.tabs.active_tab.data.package.category")
-                                            span.form-selectgroup-label {{item.title}}
-                            
-                            //- .form-group.row
-                            //-     .col-3
-                            //-         label.form-label.col-form-label Controller
-                            //-     .col.col-form-select
-                            //-         .form-selectgroup
-                            //-             label.form-selectgroup-item(ng-repeat="item in data.controller")
-                            //-                 input.form-selectgroup-input(type="radio" name="controller" value="{{item}}" ng-model="viewer.tabs.active_tab.data.package.controller")
-                            //-                 span.form-selectgroup-label {{item ? item : 'Not use'}}
 
                             .form-group.row
                                 .col-3
@@ -351,16 +330,16 @@
                                             input.form-selectgroup-input(type="radio" name="compiler_html" value="{{item}}" ng-model="viewer.tabs.active_tab.data.package.properties.html")
                                             span.form-selectgroup-label {{ item }}
 
-                            .form-group.d-flex.p-3.pt-1.pb-1.bg-secondary
+                            .form-group.d-flex.p-3.pt-1.pb-1.bg-secondary(ng-if="viewer.tabs.active_tab.dic")
                                 h4 Dictionary
 
-                            .form-group.row
+                            .form-group.row(ng-if="viewer.tabs.active_tab.dic")
                                 .col-3
                                     label.form-label.col-form-label Add Language
                                 .col
                                     input.form-control.form-control-sm.form-control-round(type="text" ng-model="viewer.tabs.active_tab.dic.new" placeholder="en" ng-enter="viewer.tabs.active_tab.dic.create(viewer.tabs.active_tab.dic.new)")
                                     
-                            .form-group.row
+                            .form-group.row(ng-if="viewer.tabs.active_tab.dic")
                                 .col-3
                                     label.form-label.col-form-label List
                                 .col.col-form-select
@@ -465,12 +444,12 @@
                                                 i.fa-solid.fa-xmark
 
                                         .code-select.bg-primary.d-flex
-                                            a.btn.btn-square.btn-sm.p-2(ng-click="tab.code.select('api')" class="{{tab.code.target == 'api' ? 'text-dark' : 'bg-primary'}}") API
-                                            a.btn.btn-square.btn-sm.p-2(ng-click="tab.code.select('socketio')" class="{{tab.code.target == 'socketio' ? 'text-dark' : 'bg-primary'}}") SocketIO
+                                            a.btn.btn-square.btn-sm.p-2(ng-if="tab.code.list.includes('api')" ng-click="tab.code.select('api')" class="{{tab.code.target == 'api' ? 'text-dark' : 'bg-primary'}}") API
+                                            a.btn.btn-square.btn-sm.p-2(ng-if="tab.code.list.includes('socketio')" ng-click="tab.code.select('socketio')" class="{{tab.code.target == 'socketio' ? 'text-dark' : 'bg-primary'}}") SocketIO
                                             a.btn.btn-square.btn-sm.p-2(ng-click="tab.code.select('jsx')" class="{{tab.code.target == 'jsx' ? 'text-dark' : 'bg-primary'}}") React
                                             a.btn.btn-square.btn-sm.p-2(ng-click="tab.code.select('view')" class="{{tab.code.target == 'view' ? 'text-dark' : 'bg-primary'}}") View
                                             a.btn.btn-square.btn-sm.p-2(ng-click="tab.code.select('scss')" class="{{tab.code.target == 'scss' ? 'text-dark' : 'bg-primary'}}") SCSS
-                                            a.btn.btn-square.btn-sm.p-2(ng-click="tab.code.select('dic')" class="{{tab.code.target == 'dic' ? 'text-dark' : 'bg-primary'}}") Dic
+                                            a.btn.btn-square.btn-sm.p-2(ng-if="tab.code.list.includes('dic')" ng-click="tab.code.select('dic')" class="{{tab.code.target == 'dic' ? 'text-dark' : 'bg-primary'}}") Dic
                                                 span(ng-if="tab.dic_selected != 'default'") ({{tab.dic_selected}})
                                             a.btn.btn-square.btn-sm.p-2(ng-click="tab.code.select('preview')" class="{{tab.code.target == 'preview' ? 'text-dark' : 'bg-primary'}}") Preview
 

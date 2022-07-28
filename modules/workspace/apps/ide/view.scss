@@ -6,6 +6,15 @@ $w-lg-min: 1280px;
 $w-lg-max: 2048px;
 $w-xl-min: 2049px;
 
+.blind {
+    position: absolute;
+    clip: rect(0, 0, 0, 0);
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+}
+
 aside {
     .nav-link {
         padding: 12px !important;
@@ -468,5 +477,41 @@ tr.bg-secondary {
 
     span+span {
         margin-left: 10px;
+    }
+}
+
+.component-add {
+    position: relative;
+    overflow: visible;
+
+    .category-list {
+        display: none;
+        position: absolute;
+        top: 24px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 9999;
+        background-color: #fff;
+        color: #000;
+        font-size: 18px;
+        border: 1px solid var(--wiz-color-primary);
+        border-radius: 10px;
+        overflow: hidden;
+
+        &-item {
+            padding: 10px;
+
+            &:hover {
+                background-color: lightblue;
+            }
+        }
+
+        .category-list-item+.category-list-item {
+            border-top: 1px solid var(--wiz-color-primary);
+        }
+    }
+
+    input[type='checkbox']:checked+.category-list {
+        display: block;
     }
 }

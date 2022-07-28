@@ -131,7 +131,7 @@ let wiz_controller = async ($sce, $scope, $timeout) => {
     $scope.event = {};
 
     $scope.event.get = {};
-    $scope.event.get.app = async (app_id, refresh) => {
+    $scope.event.get.app = async (app_id, refresh = false, category = 'page') => {
         if (app_id != 'new') {
             if (!refresh && $scope.cache.apps[app_id]) return $scope.cache.apps[app_id];
             let res = await wiz.API.async("load", { mode: 'app', id: app_id });
@@ -143,13 +143,11 @@ let wiz_controller = async ($sce, $scope, $timeout) => {
         let data = {
             package: {
                 id: '',
-                category: $scope.data.category[0].id,
-                script_type: 'text/javascript',
+                category,
                 theme: '',
                 controller: '',
                 properties: {
-                    html: 'pug',
-                    // js: 'javascript',
+                    html: 'html',
                 }
             },
             api: '',
@@ -672,11 +670,11 @@ let wiz_controller = async ($sce, $scope, $timeout) => {
 
     // tab generator
     let tab_generator = {};
-    tab_generator.app = async (app_id, target) => {
+    tab_generator.app = async (app_id, target, category = 'page') => {
         let obj = {};
         obj.id = 'wiztab-' + new Date().getTime();
         obj.mode = 'app';
-        obj.data = await $scope.event.get.app(app_id);
+        obj.data = await $scope.event.get.app(app_id, false, category);
         obj.app_id = obj.data.package.id;
         obj.org_app_id = obj.data.package.id + '';
         if (!obj.app_id) obj.new = true;
@@ -690,6 +688,36 @@ let wiz_controller = async ($sce, $scope, $timeout) => {
             $scope.data.hash_id = 'app/' + obj.app_id;
             location.href = "#" + $scope.data.hash_id;
             await $timeout();
+        }
+
+        if (category === 'component') {
+            obj.code = {};
+            obj.code.list = ['jsx', 'view', 'scss', 'preview'];
+            obj.code.select = async (target) => {
+                obj.show = false;
+                await $timeout();
+                obj.code.target = target;
+                $scope.viewer.tabs.lastcode.app = target;
+
+                if (target !== 'preview') {
+                    let _view = 'html';
+                    try {
+                        _view = $scope.cache.apps[app_id].package.properties.html;
+                    }
+                    catch { }
+                    let map = {
+                        scss: "scss",
+                        view: _view,
+                        jsx: "javascript",
+                    };
+                    obj.monaco = monaco_option(map[target], obj);
+                }
+                obj.show = true;
+                await $timeout();
+            }
+            if (!target) target = 'jsx';
+            obj.code.select(target);
+            return obj;
         }
 
         // dic builder
@@ -707,8 +735,7 @@ let wiz_controller = async ($sce, $scope, $timeout) => {
                         obj.dic.list.push(lang);
                     obj.dic.data[lang] = JSON.stringify(obj.data.dic[lang], null, 4);
                 }
-            } catch (e) {
-            }
+            } catch (e) { }
             if (!obj.dic.data.default) obj.dic.data.default = '{\n    "hello": "hello, World!"\n}';
             obj.dic.create = async (value) => {
                 let test = /^[a-zA-Z]+$/.test(value);
@@ -795,8 +822,7 @@ let wiz_controller = async ($sce, $scope, $timeout) => {
                         obj.dic.list.push(lang);
                     obj.dic.data[lang] = JSON.stringify(obj.data.dic[lang], null, 4);
                 }
-            } catch (e) {
-            }
+            } catch (e) { }
             if (!obj.dic.data.default) obj.dic.data.default = '{\n    "hello": "hello, World!"\n}';
             obj.dic.create = async (value) => {
                 let test = /^[a-zA-Z]+$/.test(value);
@@ -933,10 +959,10 @@ let wiz_controller = async ($sce, $scope, $timeout) => {
         obj.lastcode.app = 'jsx';
         obj.lastcode.route = 'controller';
 
-        obj.add = async (mode, target, location) => {
+        obj.add = async (mode, target, location, category = null) => {
             let tab = null;
             if (mode == 'app') {
-                tab = await tab_generator.app(target, obj.lastcode.app);
+                tab = await tab_generator.app(target, obj.lastcode.app, category);
             } else if (mode == 'route') {
                 tab = await tab_generator.route(target, obj.lastcode.route);
             } else {
@@ -1148,10 +1174,11 @@ let wiz_controller = async ($sce, $scope, $timeout) => {
                     let target = $scope.viewer.tabs.active_tab.code.target;
                     let target_idx = targets.indexOf(target);
 
+                    targets = targets.filter(target => target !== 'preview');
                     target_idx = target_idx - 1;
                     if (target_idx < 0) target_idx = targets.length - 1;
 
-                    let newtarget = targets[target_idx];
+                    const newtarget = targets[target_idx];
                     await $scope.viewer.tabs.active_tab.code.select(newtarget);
                     $scope.viewer.tabs.active_tab.editor.focus();
 
@@ -1170,10 +1197,11 @@ let wiz_controller = async ($sce, $scope, $timeout) => {
                     let target = $scope.viewer.tabs.active_tab.code.target;
                     let target_idx = targets.indexOf(target);
 
+                    targets = targets.filter(target => target !== 'preview');
                     target_idx = target_idx + 1;
                     if (target_idx >= targets.length) target_idx = 0;
 
-                    let newtarget = targets[target_idx];
+                    const newtarget = targets[target_idx];
                     await $scope.viewer.tabs.active_tab.code.select(newtarget);
                     $scope.viewer.tabs.active_tab.editor.focus();
 
