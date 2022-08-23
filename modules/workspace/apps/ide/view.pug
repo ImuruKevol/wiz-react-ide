@@ -44,15 +44,6 @@
                         li.nav-item
                             .row.m-0.p-0
                                 .col.m-0.p-0
-                                    a.nav-link(ng-click="event.load('router')")
-                                        span.mr-2(style="width: 20px; text-align: center;")
-                                            i.fa-solid.fa-link
-                                        .d-block
-                                            .nav-link-title Router
-
-                        li.nav-item
-                            .row.m-0.p-0
-                                .col.m-0.p-0
                                     a.nav-link(ng-click="event.load('app')")
                                         span.mr-2(style="width: 20px; text-align: center;")
                                             i.fa-solid.fa-cubes
@@ -583,7 +574,6 @@
                                                                 span(ng-click="yarn.remove(pkg[0], key)")
                                                                     i.fa-solid.fa-xmark
 
-
                                 .editor-tab-editor-container(ng-if="viewer.shortcut.show" style="width: 320px; height: 100%;")
                                     .d-block(style="height: {{ viewer.debug.show ? 'calc(60vh - 60px)' : '100%' }};")
                                         .d-flex.p-3.pt-2.pb-2.bg-primary-lt
@@ -607,6 +597,45 @@
                                                                 i.fa-solid.fa-arrow-left
                                                             small.text-muted(style="margin: 0 2px; font-size: 12px;" ng-if="$index + 1 != item.key.split(' ').length") + 
                                                     td {{item.desc}}
+
+                                .editor-tab-editor-container(ng-if="viewer.routing.show" style="width: 400px; height: 100%;")
+                                    .d-block(style="height: {{ viewer.routing.show ? 'calc(60vh - 60px)' : '100%' }};")
+                                        .d-block
+                                            .d-flex.p-3.pt-2.pb-2.bg-primary-lt
+                                                h3.nowrap.m-0(style="max-width: 220px; overflow: hidden; text-overflow: ellipsis;")
+                                                    span Routing Table
+                                                .ml-auto
+                                                    button.btn.btn-primary.btn-circle.btn-sm(style="height: 24px; width: 24px;" ng-click="viewer.routing.toggle()")
+                                                        i.fa-solid.fa-xmark
+                                        .scroll(style="height: calc(100% - 40px); overflow: auto;")
+                                            .p-1
+                                                h3
+                                                    .text-right
+                                                        button.btn.btn-primary(ng-click="routing.save()") SAVE
+                                                table.table.table-bordered.table-hover
+                                                    colgroup
+                                                        col(style="width: 120px;")
+                                                        col
+                                                        col(style="width: 100px;")
+                                                    thead
+                                                        th.text-center Path
+                                                        th.text-center App ID
+                                                        th.text-center Action
+                                                    tbody
+                                                        tr(ng-repeat="route in routing.list")
+                                                            td
+                                                                input.form-control(type="text" placeholder="/main" ng-model="route.path")
+                                                            td
+                                                                input.form-control(type="text" placeholder="component.main" ng-model="route.appId")
+                                                            td.yarn-action
+                                                                span(ng-click="routing.add()")
+                                                                    i.fa-solid.fa-plus
+                                                                span(ng-click="routing.remove($index)")
+                                                                    i.fa-solid.fa-xmark
+                                                        tr
+                                                            td.yarn-action(colspan="3")
+                                                                span(ng-click="routing.add()")
+                                                                    i.fa-solid.fa-plus
 
                         .editor-debug(ng-if="viewer.debug.show")
                             .code-select.bg-primary.d-flex(style="margin-top: -2px;")
@@ -659,6 +688,10 @@
                     .d-block
                         .btn(ng-click="viewer.yarn.toggle()" class="{{viewer.yarn.show ? 'btn-primary' : 'btn-white'}}")
                             i.fa-solid.fa-cubes
+                    
+                    .d-block
+                        .btn(ng-click="viewer.routing.toggle()" class="{{viewer.routing.show ? 'btn-primary' : 'btn-white'}}")
+                            i.fa-solid.fa-route
                     
                     .mt-auto
 

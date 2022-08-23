@@ -1,6 +1,7 @@
 let wiz_controller = async ($sce, $scope, $timeout) => {
     let _$timeout = $timeout;
     $timeout = (timestamp) => new Promise((resolve) => _$timeout(resolve, timestamp));
+    const $render = $timeout;
 
     let platform = navigator?.userAgentData?.platform || navigator?.platform || 'unknown'
     $scope.ismac = platform.toUpperCase().indexOf('MAC') >= 0;
@@ -611,6 +612,22 @@ let wiz_controller = async ($sce, $scope, $timeout) => {
     })();
 
     $scope.viewer.yarn = (function () {
+        let obj = {};
+        obj.show = false;
+
+        obj.toggle = async () => {
+            if (obj.show) {
+                obj.show = false;
+            } else {
+                obj.show = true;
+            }
+            await $timeout();
+        }
+
+        return obj;
+    })();
+
+    $scope.viewer.routing = (function () {
         let obj = {};
         obj.show = false;
 
@@ -1453,6 +1470,56 @@ let wiz_controller = async ($sce, $scope, $timeout) => {
         window.monaco.languages.registerCompletionItemProvider('javascript', autoClosing);
         // window.monaco.languages.registerCompletionItemProvider('javascript', wizCapture);
     }
+
+    $scope.routing = (() => {
+        let obj = {
+            list: [],
+        };
+        
+        obj.add = () => {
+            obj.list.push({
+                path: "",
+                appId: "",
+            });
+            $render();
+        }
+
+        obj.remove = (idx) => {
+            obj.list = [
+                ...obj.list.slice(0, idx),
+                ...obj.list.slice(idx + 1),
+            ];
+            $render();
+        }
+
+        obj.load = async () => {
+            const { code, data } = await wiz.API.async("routing");
+            if (code !== 200) {
+                toastr.error("Routing Table load failed");
+                return;
+            }
+            obj.list = data;
+            toastr.success("Success");
+            await $render();
+        }
+        obj.save = async () => {
+            console.log(obj.list);
+            const body = {
+                list: JSON.stringify(angular.copy(obj.list)),
+                main: "page.main", // @todo checkbox로 변경
+            }
+            const { code } = await wiz.API.async("routing_save", body);
+            if (code !== 200) {
+                toastr.error("Routing Table save failed");
+                return;
+            }
+            toastr.success("Success");
+            await $render();
+        }
+
+        return obj;
+    })();
+    await $scope.routing.load();
 
     await $scope.shortcut.bind();
     window.onbeforeunload = () => "";

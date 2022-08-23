@@ -410,6 +410,62 @@ def git_commit():
         wiz.response.status(500, str(e))
     wiz.response.status(200)
 
+# routing
+def routing():
+    path = os.path.join('builtin_modules', 'WizRouter')
+    app = wiz.server.wiz.model("react/main")("").load(path)
+    fs = app.fs
+    table = []
+    if fs.exists("routingTable.json") == False:
+        fs.write.json("routingTable.json", [])
+    else:
+        table = fs.read.json("routingTable.json")
+    wiz.response.status(200, table)
+
+def routing_save():
+    path = os.path.join('builtin_modules', 'WizRouter')
+    _list = wiz.request.query("list", True)
+    main = wiz.request.query("main", True)
+    app = wiz.server.wiz.model("react/main")("").load(path)
+    fs = app.fs
+    table = fs.write.text("routingTable.json", _list)
+    
+    cache = {}
+    _list = json.loads(_list)
+    _list = [{
+        "path": "/",
+        "appId": main,
+    }] + _list
+    i = 1
+    apps = []
+    COMP = '<__COMPONENT__>'
+    for route in _list:
+        route["element"] = f'{COMP}{i}'
+        apps.append(route["appId"])
+        route.pop("appId")
+        i = i + 1
+    routes = json.dumps(_list, indent=4)
+    imports = 'import React from "react";\n'
+    for i in range(len(_list)):
+        _i = i + 1
+        routes = routes.replace(f'"{COMP}{_i}"', f'<Component{_i} />')
+        app_id = apps[i]
+        imports = imports + f'import Component{_i} from "{app_id}";\n'
+    
+    text = f'''{imports}
+const RouteTable = {routes}
+export const RedirectTable = [
+    {{
+        from: "*",
+        to: "/",
+    }},
+];
+export default RouteTable;'''
+    text = text + "\n"
+    fs.write.text("RoutingTable.jsx", text)
+
+    wiz.response.status(200)
+
 def package():
     yarn = wiz.server.wiz.model("react/yarn")()
 
